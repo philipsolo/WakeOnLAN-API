@@ -20,9 +20,9 @@ from wakeonlan import send_magic_packet
 def app_container(port):
     app = Flask(__name__)
 
-    @app.route("/wol/<mac>", methods=['POST'])
+    @app.route("/wol/<mac>", methods=['GET'])
     def myjd_stop(mac):
-        if request.method == 'POST':
+        if request.method == 'GET':
             try:
                 send_magic_packet(mac)
                 print("Waking up: " + mac)
