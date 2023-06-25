@@ -39,10 +39,11 @@ def app_container(port):
     def myjd_stop(device):
         if request.method == 'GET':
             try:
-                wake_device(device)
-                return "Success", 200
-            except:
-                return "Failed", 400
+                if wake_device(device):
+                    return "Success", 200
+            except Exception as e:
+                print(e)
+            return "Failed", 500
         else:
             return "Failed", 405
 
