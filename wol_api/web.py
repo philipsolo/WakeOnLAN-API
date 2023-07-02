@@ -4,9 +4,7 @@ import datetime
 import json
 from collections import Counter
 import transmissionrpc
-from docopt import docopt
-from flask import Flask, make_response, request
-from flask import Flask, request
+from flask import Flask, make_response, request, jsonify
 from gevent.pywsgi import WSGIServer
 from wakeonlan import send_magic_packet
 
@@ -109,22 +107,17 @@ def app_container(port):
         if request.method == 'GET':
             try:
                 if wake_device(device):
-                    return "Success", 200
+                    return jsonify("success", 200)
             except Exception as e:
                 print(e)
-            return "Failed", 500
+            return jsonify("Failed", 500)
         else:
-            return "Failed", 405
+            return jsonify("Failed", 405)
 
     http_server = WSGIServer(('0.0.0.0', port), app)
     http_server.serve_forever()
 
 
 def main():
-    arguments = docopt(__doc__, version='WakeOnLAN-API')
-
-    if arguments['--port']:
-        port = int(arguments['--port'])
-    else:
-        port = 8081
+    port = 5001
     app_container(port)
